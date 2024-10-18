@@ -1,0 +1,235 @@
+<section class="h-full mx-5">
+  <app-breadcrumb />
+  <h3 class="font-medium text-center">
+    <i class="pi pi-pen-to-square text-teal-500 ml-4 px-2"></i> Nueva Incidencia
+  </h3>
+  <p-toast />
+  <div class="max-w-6xl mx-auto">
+    <p-panel>
+      <form
+        [formGroup]="myForm"
+        (ngSubmit)="onSubmit()"
+        class="grid grid-cols-4 gap-5 w-[90%] mx-auto"
+      >
+        <!-- Fecha Hoy -->
+        <div class="">
+          <p-fieldset legend="Fecha de hoy">
+            <p class="m-0 pl-2">
+              {{ fechaHoy | date : " dd-MM-yyyy" }}
+            </p>
+          </p-fieldset>
+        </div>
+
+        <!-- Hora inicio -->
+        <div class="flex flex-col justify-center">
+          <label for="calendar-timeonly" class="block mb-2">
+            Hora Inicio
+          </label>
+          <p-calendar
+            inputId="calendar-timeonly"
+            formControlName="horaInicio"
+            [timeOnly]="true"
+          />
+          @if (myForm.get('horaInicio')?.invalid &&
+          myForm.get('horaInicio')?.touched) {
+          <small class="p-error">La hora de inicio es requerida</small>
+          }
+        </div>
+
+        <!-- Tipo -->
+        <div class="flex flex-col justify-center">
+          <label for="tipo" class="block mb-2" style="width: 100px">Tipo</label>
+          <p-dropdown
+            id="tipo"
+            [options]="tiposList"
+            formControlName="tipo"
+            optionLabel="nombre"
+            placeholder="Seleccione un tipo"
+            (onChange)="onTipoSelectionChange($event)"
+          ></p-dropdown>
+          @if(myForm.get('tipo')?.invalid && myForm.get('tipo')?.touched){
+          <small class="p-error"> El tipo es requerido </small>
+          }
+        </div>
+
+        <!-- Subtipo -->
+        <div class="flex flex-col justify-center">
+          <label for="subtipo" class="block mb-2" style="width: 100px"
+            >Subtipo</label
+          >
+          <p-dropdown
+            id="subtipo"
+            [options]="subtiposList"
+            formControlName="subtipo"
+            optionLabel="nombre"
+            placeholder="Seleccione un subtipo"
+          ></p-dropdown>
+        </div>
+
+        <!-- Titulo -->
+        <div class="col-span-4 flex flex-col w-full mx-auto">
+          <label for="titulo" class="block mb-2" style="width: 100px"
+            >Título</label
+          >
+          <input
+            id="titulo"
+            type="text"
+            pInputText
+            formControlName="titulo"
+            placeholder="Ingrese el título"
+            class="w-full mx-auto"
+          />
+          @if ( myForm.get('titulo')?.invalid && myForm.get('titulo')?.touched)
+          {
+          <small class="p-error">El título es requerido</small>
+          }
+        </div>
+
+        <!-- Comentario -->
+        <div class="col-span-4 flex flex-col w-full mx-auto">
+          <label for="comentario" class="block mb-2" style="width: 100px"
+            >Comentario</label
+          >
+          <textarea
+            style="width: 100%"
+            id="comentario"
+            pInputTextarea
+            formControlName="comentario"
+            rows="5"
+            placeholder="Escribe tu comentario"
+            class="p-inputtext-sm"
+          ></textarea>
+          @if ( myForm.get('comentario')?.invalid &&
+          myForm.get('comentario')?.touched) {
+          <small class="p-error">El comentario es requerido</small> }
+        </div>
+
+        <!-- Botón de enviar -->
+        <div class="col-span-3">
+          <div class="mx-auto">
+            <button
+              pButton
+              label="Crear Incidencia"
+              type="submit"
+              [disabled]="myForm.invalid"
+            ></button>
+          </div>
+        </div>
+      </form>
+    </p-panel>
+  </div>
+  <h3 class="font-medium text-center">
+    <i class="pi pi-map-marker text-teal-500 ml-4 px-2 my-5"></i> Nueva Guardia
+    Localizada
+  </h3>
+  <div class="max-w-6xl mx-auto">
+    <p-panel>
+      <form
+        [formGroup]="guardiasForm"
+        (ngSubmit)="onSubmitGuardia()"
+        class="grid grid-cols-3 gap-5 w-[90%] mx-auto"
+      >
+        <!-- Fecha Hoy -->
+        <div class="">
+          <p-fieldset legend="Fecha de hoy">
+            <p class="m-0 pl-2">
+              {{ fechaHoy | date : " dd-MM-yyyy" }}
+            </p>
+          </p-fieldset>
+        </div>
+
+        <!-- Hora inicio -->
+        <div class="flex flex-col justify-center">
+          <label for="calendar-timeonly" class="block mb-2">
+            Hora Inicio
+          </label>
+          <p-calendar
+            inputId="calendar-timeonly"
+            formControlName="horaInicio"
+            [timeOnly]="true"
+          />
+          @if (guardiasForm.get('horaInicio')?.invalid &&
+          guardiasForm.get('horaInicio')?.touched) {
+          <small class="p-error">La hora de inicio es requerida</small>
+          }
+        </div>
+
+        <!-- Hora Fin -->
+        <div class="flex flex-col justify-center">
+          <label for="calendar-timeonly" class="block mb-2"> Hora fin </label>
+          <p-calendar
+            inputId="calendar-timeonly"
+            formControlName="horaFin"
+            [timeOnly]="true"
+          />
+          @if (guardiasForm.get('horaFin')?.invalid &&
+          guardiasForm.get('horaFin')?.touched) {
+          <small class="p-error">La hora de fin es requerida</small>
+          }
+        </div>
+
+        <!-- Usuario -->
+        <div class="col-span-2 flex flex-col justify-center">
+          <label for="usuario" class="block mb-2" style="width: 100px"
+            >Profesional</label
+          >
+          <p-dropdown
+            id="usuario"
+            [options]="usuariosList"
+            formControlName="usuario"
+            optionLabel="nombre"
+            placeholder="Seleccione un profesional"
+            (onChange)="onTipoSelectionChange($event)"
+          >
+            <ng-template pTemplate="selectedItem">
+              <div class="flex align-items-center gap-2">
+                <div>{{ guardiasForm.value.usuario.nombre }}</div>
+                <div>{{ guardiasForm.value.usuario.apellidos }}</div>
+              </div>
+            </ng-template>
+            <ng-template let-user pTemplate="item">
+              <div class="flex items-center gap-2">
+                <div>{{ user.nombre }}</div>
+                <div>{{ user.apellidos }}</div>
+              </div>
+            </ng-template></p-dropdown
+          >
+          @if(myForm.get('usuario')?.invalid && myForm.get('usuario')?.touched){
+          <small class="p-error"> El usuario es requerido </small>
+          }
+        </div>
+
+        <!-- Comentario -->
+        <div class="col-span-4 flex flex-col w-full mx-auto">
+          <label for="comentario" class="block mb-2" style="width: 100px"
+            >Comentario</label
+          >
+          <textarea
+            style="width: 100%"
+            id="comentario"
+            pInputTextarea
+            formControlName="comentario"
+            rows="5"
+            placeholder="Escribe tu comentario"
+            class="p-inputtext-sm"
+          ></textarea>
+          @if ( guardiasForm.get('comentario')?.invalid &&
+          guardiasForm.get('comentario')?.touched) {
+          <small class="p-error">El comentario es requerido</small> }
+        </div>
+
+        <!-- Botón de enviar -->
+        <div class="col-span-3">
+          <div class="mx-auto">
+            <button
+              pButton
+              label="Crear Guardia Localizada"
+              type="submit"
+              [disabled]="guardiasForm.invalid"
+            ></button>
+          </div>
+        </div>
+      </form>
+    </p-panel>
+  </div>
+</section>

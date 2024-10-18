@@ -1,0 +1,50 @@
+<section
+  class="flex items-center justify-center h-screen bg-cover bg-right bg-fondo"
+>
+  <form
+    autocomplete="off"
+    [formGroup]="myForm"
+    (ngSubmit)="login()"
+    class="flex flex-col items-center gap-4 p-14 px-24 rounded-xl bg-white/90"
+  >
+    <div class="flex flex-col gap-2">
+      <label for="usuario" class="text-gray-700"
+        ><i class="pi pi-user text-teal-500 mr-3"></i>Usuario
+      </label>
+      <input
+        pInputText
+        formControlName="dni"
+        id="usuario"
+        aria-describedby="username-help"
+        class="bg-transparent"
+      />
+      <small id="username-help" class="text-gray-700">
+        Escribe tu nombre de usuario
+      </small>
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label for="password" class="text-gray-700"
+        ><i class="pi pi-lock text-teal-500 mr-3"></i>Contraseña
+      </label>
+      <input
+        type="password"
+        pInputText
+        formControlName="password"
+        id="password"
+        aria-describedby="username-help"
+        class="bg-transparent"
+      />
+      <small id="username-help" class="text-gray-700">
+        Escribe tu contraseña
+      </small>
+    </div>
+    <span class="text-red-600 text-sm">{{ loginError }}</span>
+    <button
+      pButton
+      label="Iniciar Sesión"
+      type="submit"
+      [disabled]="myForm.invalid"
+    ></button>
+  </form>
+</section>

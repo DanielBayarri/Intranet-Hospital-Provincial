@@ -1,0 +1,49 @@
+<section class="flex flex-col items-start">
+  <h2 class="text-xl font-bold text-textColor">Servicios</h2>
+  <app-primary-bar />
+
+  <!-- Buscador -->
+  <div class="flex flex-col gap-2 mt-4 mx-auto">
+    <input
+      pInputText
+      type="text "
+      name="searchInputValue"
+      id="search-contact"
+      [(ngModel)]="searchInputValue"
+      placeholder="Buscar..."
+    />
+    <small class="text-textColor"> Escribe el servicio o nombre </small>
+  </div>
+
+  <!-- Listado -->
+  <div class="flex flex-col w-full items-start">
+    <h3 class="text-textColor text-base">Servicios Hospital Provincial</h3>
+    <div
+      class="list-none text-textColor mt-6 font-bold grid grid-cols-2 gap-6 mx-auto"
+    >
+      @for (servicio of serviciosList | searchService: searchInputValue ; track
+      $index){
+      <div>
+        <app-servicios-card
+          [servicio]="servicio.servicio"
+          [telefono]="servicio.telefono"
+          [email]="servicio.email"
+        />
+      </div>
+      }
+    </div>
+  </div>
+
+  <div class="flex flex-col gap-4 mt-3">
+    <span class="font-bold text-textColor"
+      >Necesitas modificar algun dato?</span
+    >
+    <a
+      href="https://chpcs.atlassian.net/servicedesk/customer/portals"
+      class="text-azul"
+      >Portal Peticiones - Jira Service Management (atlassian.net)</a
+    >
+  </div>
+
+  <div class="mr-16 h-[2px] flex w-full bg-gray-100 my-6"></div>
+</section>

@@ -1,0 +1,77 @@
+<section>
+  <h2 class="text-xl font-bold text-textColor">Mi Perfil</h2>
+  <app-primary-bar />
+
+  <div class="grid grid-col-2 gap-4 px-6 my-4">
+    <div class="flex flex-col">
+      <label for="nombre" class="text-sm text-textColor font-bold mb-1"
+        >NOMBRE</label
+      >
+      <input
+        type="text"
+        id="nombre"
+        value="{{ user()?.nombre }}"
+        disabled
+        class="rounded py-2 px-2 bg-[#eaeced] border-none text-base"
+      />
+    </div>
+    <div class="flex flex-col">
+      <label for="apellidos" class="text-sm text-textColor font-bold mb-1"
+        >APELLIDOS</label
+      >
+      <input
+        type="text"
+        id="apellidos"
+        value="{{ user()?.apellidos }}"
+        disabled
+        class="rounded py-2 px-2 bg-[#eaeced] border-none text-base"
+      />
+    </div>
+    <div class="flex flex-col">
+      <label for="dni" class="text-sm text-textColor font-bold mb-1">DNI</label>
+      <input
+        type="text"
+        id="dni"
+        value="{{ user()?.dni }}"
+        disabled
+        class="rounded py-2 px-2 bg-[#eaeced] border-none text-base"
+      />
+    </div>
+    <div class="flex flex-col">
+      <label for="grupo" class="text-sm text-textColor font-bold mb-1"
+        >GRUPO</label
+      >
+      <input
+        type="text"
+        id="grupo"
+        value="{{ user()?.grupo?.nombre }}"
+        disabled
+        class="rounded py-2 px-2 bg-[#eaeced] border-none text-base"
+      />
+    </div>
+
+    <div class="flex flex-col col-span-2">
+      <label for="email" class="text-sm text-textColor font-bold mb-1"
+        >EMAIL</label
+      >
+      <input
+        type="text"
+        id="email"
+        value="{{ user()?.email }}"
+        disabled
+        class="rounded py-2 px-2 bg-[#eaeced] border-none text-base"
+      />
+    </div>
+  </div>
+  <div class="flex flex-col gap-4">
+    <span class="font-bold text-textColor"
+      >Necesitas modificar algun dato?</span
+    >
+    <a
+      href="https://chpcs.atlassian.net/servicedesk/customer/portals"
+      class="text-azul"
+      >Portal Peticiones - Jira Service Management (atlassian.net)</a
+    >
+  </div>
+  <div class="mr-16 h-[2px] flex w-full bg-gray-100 my-6"></div>
+</section>

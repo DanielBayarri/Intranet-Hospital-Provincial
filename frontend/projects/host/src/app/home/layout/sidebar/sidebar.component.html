@@ -1,0 +1,69 @@
+@if(loader){
+<app-loader />
+}
+<aside
+  class="flex flex-col h-full bg-[#f6f6f6] mt-10 mb-6 mx-3 rounded-xl p-8 text-textColor font-bold"
+>
+  <h2 class="text-2xl">Hola, {{ user()?.nombre }}</h2>
+  <app-primary-bar />
+
+  <div class="flex flex-col gap-4 mt-8">
+    <app-sidemenu-link
+      [isLink]="true"
+      [name]="'Página Hospital Provincial'"
+      [icon]="'wave-pulse'"
+      [url]="'https://www.hospitalprovincial.es/es/'"
+    />
+    <app-sidemenu-link
+      [isLink]="false"
+      [name]="'RegIn Registro de Incidencias'"
+      [icon]="'file-edit'"
+      routerLink="../regin"
+      (click)="startLoader()"
+    />
+    <app-sidemenu-link
+      [isLink]="true"
+      [url]="'https://chpcs.sedelectronica.es/info.0'"
+      [name]="'Sede Electrónica'"
+      [icon]="'book'"
+    />
+    <app-sidemenu-link
+      [isLink]="true"
+      [url]="'https://gestiona-15.espublico.com/'"
+      [name]="'Gestiona'"
+      [icon]="'building-columns'"
+    />
+    <app-sidemenu-link
+      [isLink]="true"
+      [url]="'https://chpcs.atlassian.net/servicedesk/customer/portals'"
+      [name]="'Portal Peticiones CHPCS'"
+      [icon]="'bolt'"
+    />
+  </div>
+  <div class="w-full h-[2px] bg-[#eaeced] my-10"></div>
+
+  <!-- App Navegador -->
+
+  <div class="">
+    <h3 class="text-lg">Aplicaciones por Navegador</h3>
+    <ul
+      class="list-disc list-outside text-azul mt-6 text-[0.95rem] no-underline"
+    >
+      @for (link of linksApp; track $index){ @if(verAppNavegador){
+      <li class="my-1">
+        <app-sidemenu-app [name]="link.nombre" [url]="link.url" />
+      </li>
+      } @else { @if($index < 6){
+      <li class="my-1">
+        <app-sidemenu-app [name]="link.nombre" [url]="link.url" />
+      </li>
+      } } }
+    </ul>
+    <div class="w-full text-end cursor-pointer" (click)="onShowApp()">
+      <span class="text-sm text-azul">{{
+        verAppNavegador ? "Ver menos" : "Ver todas"
+      }}</span>
+    </div>
+  </div>
+  <div class="w-full h-[2px] bg-[#eaeced] my-10"></div>
+</aside>

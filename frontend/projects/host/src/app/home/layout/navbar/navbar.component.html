@@ -1,0 +1,125 @@
+<nav
+  style="
+    background: rgb(9, 168, 160);
+    background: linear-gradient(
+      90deg,
+      rgba(9, 168, 160, 1) 0%,
+      rgba(128, 195, 102, 1) 100%
+    );
+  "
+  class="w-full h-16 text-white flex flex-col items-center justify-center"
+>
+  <ul
+    class="flex gap-8 list-none max-w-[90rem] w-full text-sm font-semibold cursor-pointer"
+  >
+    <li class="relative">
+      <a
+        href="#"
+        class="no-underline text-white flex items-center"
+        (click)="togglePlantillasDropdown($event)"
+      >
+        PLANTILLAS Y MATERIALES CORPORATIVOS
+        <i class="pi pi-sort-down-fill text-sm mx-2"></i>
+      </a>
+      <!-- Dropdown -->
+      <div
+        class="dropdown-content absolute left-28 top-full mt-5 w-48 shadow-lg rounded hidden py-2"
+        [ngClass]="{ hidden: !dropdownPlantillas, visible: dropdownPlantillas }"
+        style="
+          background: rgb(9, 168, 160);
+          background: linear-gradient(
+            90deg,
+            rgba(9, 168, 160, 1) 0%,
+            rgba(128, 195, 102, 1) 100%
+          );
+        "
+      >
+        <a
+          href="/documents/plantilla_word.docx"
+          download
+          class="no-underline block px-4 py-2 text-white hover:bg-cyan-500"
+        >
+          Plantilla Word
+        </a>
+
+        <a
+          href="/documents/PlantillaCHPCS.pptx"
+          download
+          class="no-underline block px-4 py-2 text-white hover:bg-cyan-500"
+        >
+          Plantilla PowerPoint
+        </a>
+
+        <a
+          href="/documents/Firma_plantilla.docx"
+          download
+          class="no-underline block px-4 py-2 text-white hover:bg-cyan-500"
+        >
+          Plantilla Firma
+        </a>
+
+        <a
+          href="/documents/Fondo_escritorio.jpg"
+          download
+          class="no-underline block px-4 py-2 text-white hover:bg-cyan-500"
+        >
+          Fondo de escritorio
+        </a>
+
+        <a
+          href="/documents/Fondo_reuniones.png"
+          download
+          class="no-underline block px-4 py-2 text-white hover:bg-cyan-500"
+        >
+          Fondo Teams
+        </a>
+      </div>
+    </li>
+
+    <li class="relative">
+      <a
+        href="#"
+        class="no-underline text-white flex items-center"
+        (click)="toggleEticaDropdown($event)"
+      >
+        ÉTICA PROFESIONAL <i class="pi pi-sort-down-fill text-sm mx-2"></i>
+      </a>
+      <div
+        class="dropdown-content absolute -left-4 top-full mt-5 w-48 shadow-lg rounded hidden py-2"
+        [ngClass]="{ hidden: !dropdownEtica, visible: dropdownEtica }"
+        style="
+          background: rgb(9, 168, 160);
+          background: linear-gradient(
+            90deg,
+            rgba(9, 168, 160, 1) 0%,
+            rgba(128, 195, 102, 1) 100%
+          );
+        "
+      >
+        <a
+          href="/documents/plan_igualdad.pdf"
+          download
+          class="no-underline block px-4 py-2 text-white hover:bg-cyan-500"
+        >
+          Plan de igualdad
+        </a>
+
+        <a
+          href="/documents/Protocolo de actuación contra el acoso sexual.pdf"
+          download
+          class="no-underline block px-4 py-2 text-white hover:bg-cyan-500"
+        >
+          Protocolo de actuación contra acoso sexual
+        </a>
+
+        <a
+          href="/documents/guia_breve_para_uso_no_sexista_del_lenguaje_ambito_sanitario_es.pdf"
+          download
+          class="no-underline block px-4 py-2 text-white hover:bg-cyan-500"
+        >
+          Guia lenguaje no sexista
+        </a>
+      </div>
+    </li>
+  </ul>
+</nav>

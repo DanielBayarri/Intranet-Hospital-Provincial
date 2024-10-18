@@ -1,0 +1,17 @@
+<div class="flex flex-col">
+  <app-user-navbar />
+  <app-navbar />
+  <div class="flex flex-col lg:flex-row max-w-[90vw] mx-auto px-3">
+    <main class="max-w-[65vw]">
+      <app-header />
+      <app-menu />
+      <router-outlet />
+      <div class="flex flex-col lg:flex-row gap-5">
+        <app-faq />
+        <app-documents />
+      </div>
+    </main>
+    <app-sidebar class="lg:max-w-[25vw] w-full order-1 lg:order-8" />
+  </div>
+  <app-footer />
+</div>

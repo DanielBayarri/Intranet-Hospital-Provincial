@@ -1,0 +1,202 @@
+<section class="h-full mx-5">
+  <p-toast />
+  <p-confirmPopup />
+  <app-breadcrumb />
+  <h3 class="font-medium text-center">
+    <i class="pi pi-sitemap text-teal-500 ml-4 px-2"></i> Tipos y Subtipos
+  </h3>
+  <div class="flex gap-10 justify-evenly">
+    <!-- Tabla de Tipos -->
+    <p-table
+      [value]="tiposList"
+      styleClass="w-[500px]"
+      [paginator]="true"
+      [rows]="5"
+      [rowsPerPageOptions]="[5, 10, 20]"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Tipo</th>
+          <th>Acciones</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-tipo>
+        <tr>
+          <td>{{ tipo.nombre }}</td>
+          <td>
+            <i
+              pTooltip="Editar"
+              tooltipPosition="top"
+              class="pi pi-pencil text-cyan-600 mx-2 cursor-pointer"
+              (click)="editingTipo(tipo)"
+            ></i>
+            <i
+              pTooltip="Eliminar"
+              tooltipPosition="top"
+              class="pi pi-trash text-red-600 mx-2 cursor-pointer"
+              (click)="deleteTipo($event, tipo)"
+            ></i>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+
+    <!-- Tabla de Subtipos -->
+    @if (!isLoading) {
+    <p-table
+      [value]="subtiposList"
+      styleClass="w-[500px]"
+      [paginator]="true"
+      [rows]="5"
+      [rowsPerPageOptions]="[5, 10, 20]"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Subtipo</th>
+          <th>Tipo al que pertenece</th>
+          <th>Acciones</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-subtipo>
+        <tr>
+          <td>{{ subtipo.nombre }}</td>
+          <td class="text-sm">{{ subtipo.tipoNombre }}</td>
+          <!-- Mostrar el nombre del tipo al que pertenece -->
+          <td>
+            <i
+              pTooltip="Editar"
+              tooltipPosition="left"
+              class="pi pi-pencil text-cyan-600 mx-2 cursor-pointer"
+              (click)="editingSubtipo(subtipo)"
+            ></i>
+            <i
+              pTooltip="Eliminar"
+              tooltipPosition="left"
+              class="pi pi-trash text-red-600 mx-2 cursor-pointer"
+              (click)="deleteSubtipo($event, subtipo)"
+            ></i>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+    }@else {
+    <div class="w-[500px] h-[332px]"></div>
+    }
+  </div>
+  <!-- Formularios -->
+  <h3 class="font-medium text-center">
+    <i class="pi pi-sitemap text-teal-500 ml-4 px-2"></i> Crear y modificar
+  </h3>
+  <div class="flex gap-10 justify-center mt-6">
+    <!-- Tipos -->
+    <p-panel styleClass="w-full min-w-[400px]">
+      <form
+        [formGroup]="tipoForm"
+        (ngSubmit)="!isEditingTipo ? postTipo() : patchTipo(oldEditTipo)"
+      >
+        <div class="col-span-4 flex flex-col w-full mx-auto mb-3">
+          <label for="tipo" class="mb-2" style="width: 300px">{{
+            isEditingTipo
+              ? "Editando tipo: " + oldEditTipo?.nombre
+              : "Crear Tipo"
+          }}</label>
+          <input
+            id="tipo"
+            type="text"
+            pInputText
+            formControlName="tipo"
+            placeholder="Ingrese el tipo"
+            class="w-full mx-auto"
+            value="{{ oldEditTipo?.nombre }}"
+          />
+        </div>
+        @if (tipoForm.get('tipo')?.invalid && tipoForm.get('tipo')?.touched) {
+        <small class="p-error">El nombre del tipo es requerido</small>
+        }
+        <div class="flex gap-2">
+          <p-button
+            label="Guardar"
+            [outlined]="true"
+            size="small"
+            [icon]="'pi pi-save'"
+            type="submit"
+          />
+          <p-button
+            [disabled]="!isEditingTipo"
+            label="Cancelar"
+            [outlined]="true"
+            severity="danger"
+            size="small"
+            [icon]="'pi pi-times'"
+            (click)="cancelEditTipo()"
+          />
+        </div>
+      </form>
+    </p-panel>
+    <!-- Subtipos -->
+    <p-panel styleClass="w-full min-w-[400px]">
+      <form
+        [formGroup]="subtipoForm"
+        (ngSubmit)="
+          !isEditingSubtipo ? postSubipo() : patchSubtipo(oldEditSubtipo)
+        "
+      >
+        <div class="col-span-4 flex flex-col w-full mx-auto mb-3">
+          <label for="subtipo" class="flex mb-2" style="width: 300px">{{
+            isEditingSubtipo
+              ? "Editando subtipo: " + oldEditSubtipo?.nombre
+              : "Subtipo"
+          }}</label>
+          <input
+            id="subtipo"
+            type="text"
+            pInputText
+            formControlName="subtipo"
+            placeholder="Ingrese el subtipo"
+            class="w-full mx-auto"
+            value="{{ oldEditSubtipo?.nombre }}"
+          />
+        </div>
+        @if (subtipoForm.get('subtipo')?.invalid &&
+        subtipoForm.get('subtipo')?.touched) {
+        <small class="p-error">El nombre del subtipo es requerido</small>
+        }
+
+        <div class="flex flex-col justify-center">
+          <label for="tiposub" class="block mb-2" style="width: 300px">{{
+            isEditingSubtipo ? "Tipo anterior: " + oldEditSubtipo?.tipo : "Tipo"
+          }}</label>
+          <p-dropdown
+            id="tiposub"
+            [options]="tiposList"
+            formControlName="tiposList"
+            optionLabel="nombre"
+            placeholder="Seleccione un tipo"
+          ></p-dropdown>
+          @if (subtipoForm.get('tiposList')?.invalid &&
+          subtipoForm.get('tiposList')?.touched) {
+          <small class="p-error">El nombre del tipo es requerido</small>
+          }
+        </div>
+        <div class="flex gap-2 mt-3">
+          <p-button
+            label="Guardar"
+            [outlined]="true"
+            size="small"
+            [icon]="'pi pi-save'"
+            type="submit"
+          />
+          <p-button
+            [disabled]="!isEditingSubtipo"
+            label="Cancelar"
+            [outlined]="true"
+            severity="danger"
+            size="small"
+            [icon]="'pi pi-times'"
+            (click)="cancelEditSubtipo()"
+          />
+        </div>
+      </form>
+    </p-panel>
+  </div>
+</section>

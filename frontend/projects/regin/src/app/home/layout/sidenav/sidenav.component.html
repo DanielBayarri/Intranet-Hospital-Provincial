@@ -1,0 +1,43 @@
+<aside
+  class="w-72 h-full flex flex-col items-center font-bold pt-4 bg-teal-600"
+>
+  <img src="/logoProvincial-blanco.webp" width="200" alt="" />
+  <nav class="w-full my-4 flex flex-col">
+    @for (item of itemsNav; track $index) { @if (user()?.role?.nombre ===
+    'Usuario' && item.title === 'Registro Incidencias') {
+    <span class="text-sm text-gray-100 pl-6 py-1 pt-3">
+      {{ item.title }}
+    </span>
+    @for (link of item.links; track $index) {
+    <a
+      routerLink="{{ link.href }}"
+      routerLinkActive="font-bold"
+      class="text-gray-100 no-underline pl-10 hover:bg-teal-100 hover:text-teal-900 rounded py-2 mx-2 my-1 text-sm"
+      ><i class="pi {{ link.icon }} pr-3 text-lg"></i> {{ link.title }}</a
+    >
+    } } @if (user()?.role?.nombre === 'Administrador' && (item.title ===
+    'Registro Incidencias' || item.title === 'Administrador')) {
+    <span class="text-xs text-gray-100 pl-6 py-1 pt-3">
+      {{ item.title }}
+    </span>
+    @for (link of item.links; track $index) {
+    <a
+      routerLink="{{ link.href }}"
+      routerLinkActive="font-bold"
+      class="text-gray-100 no-underline pl-10 hover:bg-teal-100 hover:text-teal-900 font-bold rounded py-2 mx-2 my-1 text-sm"
+      ><i class="pi {{ link.icon }} pr-3 text-lg"></i> {{ link.title }}</a
+    >
+    } } @if (user()?.role?.nombre === 'Super Administrador') {
+    <span class="text-xs text-gray-100 pl-6 py-1 pt-3">
+      {{ item.title }}
+    </span>
+    @for (link of item.links; track $index) {
+    <a
+      routerLink="{{ link.href }}"
+      routerLinkActive="font-bold"
+      class="text-gray-100 no-underline pl-10 hover:bg-teal-100 hover:text-teal-900 rounded py-2 mx-2 my-1 text-sm"
+      ><i class="pi {{ link.icon }} pr-3 text-lg"></i> {{ link.title }}</a
+    >
+    } } }
+  </nav>
+</aside>

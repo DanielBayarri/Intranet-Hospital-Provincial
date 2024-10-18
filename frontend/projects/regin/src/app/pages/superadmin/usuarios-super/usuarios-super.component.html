@@ -1,0 +1,273 @@
+<section class="h-full mx-5">
+  <app-breadcrumb />
+  <p-toast />
+  <p-confirmPopup />
+  <h3 class="font-medium text-center">
+    <i class="pi pi-user text-teal-500 ml-4 px-2"></i> Listado de Usuarios
+  </h3>
+
+  <!-- Tabla usuarios -->
+  <div class="card max-w-7xl mx-auto">
+    <p-table
+      #dt2
+      [value]="usuariosList"
+      [tableStyle]="{ 'min-width': '70rem' }"
+      [styleClass]="'p-datatable-sm p-datatable-striped'"
+      styleClass="p-datatable-striped"
+      [paginator]="true"
+      [rows]="5"
+      [rowsPerPageOptions]="[5, 10, 20]"
+      [globalFilterFields]="['nombre', 'apellidos', 'dni']"
+    >
+      <ng-template pTemplate="caption">
+        <div class="flex flex-col items-end mb-5">
+          <label
+            for="busqueda"
+            class="text-sm font-normal my-1 text-[#4a5568] px-2 mb-1"
+            >Busqueda por nombre, apellidos o DNI</label
+          >
+          <p-iconField iconPosition="right" class="ml-auto">
+            <p-inputIcon>
+              <i class="pi pi-search"></i>
+            </p-inputIcon>
+            <input
+              pInputText
+              type="text"
+              (input)="dt2.filterGlobal($any($event.target).value, 'contains')"
+              placeholder="Buscar..."
+              class="custom-input"
+            />
+          </p-iconField>
+        </div>
+      </ng-template>
+
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="nombre" style="width: 13%">
+            Nombre <p-sortIcon field="nombre" />
+          </th>
+          <th pSortableColumn="apellidos" style="width: 15%">
+            Apellidos <p-sortIcon field="apelllidos" />
+          </th>
+          <th pSortableColumn="dni" style="width: 12%">
+            Dni <p-sortIcon field="dni" />
+          </th>
+          <th pSortableColumn="email" style="width: 25%">
+            Email <p-sortIcon field="email" />
+          </th>
+
+          <th pSortableColumn="grupo" style="width: 15%">
+            Grupo <p-sortIcon field="grupo" />
+          </th>
+          <th pSortableColumn="rol" style="width: 15%">
+            Rol <p-sortIcon field="rol" />
+          </th>
+          <th pSortableColumn="bloqueado" style="width: 5%">
+            Bloqueado <p-sortIcon field="bloqueado" />
+          </th>
+          <th style="width: 15%">Acciones</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-usuario>
+        <tr>
+          <td>{{ usuario.nombre }}</td>
+          <td>{{ usuario.apellidos }}</td>
+          <td>{{ usuario.dni }}</td>
+          <td>{{ usuario.email }}</td>
+          <td>
+            <p-tag
+              [value]="usuario.grupo.nombre"
+              [severity]="getSeverity(usuario.grupo.id)"
+            />
+          </td>
+          <td>{{ usuario.role.nombre }}</td>
+          <td>{{ usuario.bloqueado ? "Si" : "No" }}</td>
+
+          <td>
+            <i
+              pTooltip="Editar"
+              tooltipPosition="top"
+              class="pi pi-pencil text-cyan-600 mx-2 cursor-pointer"
+              (click)="editingUsuario(usuario)"
+            ></i>
+            <i
+              pTooltip="Eliminar"
+              tooltipPosition="top"
+              class="pi pi-trash text-red-600 mx-2 cursor-pointer"
+              (click)="deleteUsuario($event, usuario)"
+            ></i>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+  <!-- Formulario  -->
+  <h3 class="font-medium text-center">
+    <i class="pi pi-user text-teal-500 ml-4 px-2"></i> Crear y modificar
+    Usuarios
+  </h3>
+
+  <p-panel styleClass="w-full px-10 py-6 max-w-7xl mx-auto">
+    <span class="font-semibold mt-0 mb-5">
+      {{
+        isEditingUsuario
+          ? "Editando usuario: " + oldEditUsuario?.dni
+          : "Crear Usuario"
+      }}</span
+    >
+
+    <form
+      [formGroup]="usuarioForm"
+      (ngSubmit)="
+        !isEditingUsuario ? postUsuario() : patchUsuario(oldEditUsuario)
+      "
+      class="grid grid-cols-4 gap-5"
+    >
+      <!-- Nombre -->
+      <div class="flex flex-col col-span-2 w-full mx-auto mb-3">
+        <label for="nombre" class="mb-2">Nombre</label>
+        <input
+          id="nombre"
+          type="text"
+          pInputText
+          formControlName="nombre"
+          placeholder="Ingrese el usuario"
+          value="{{ oldEditUsuario?.nombre }}"
+        />
+        @if (usuarioForm.get('nombre')?.invalid &&
+        usuarioForm.get('nombre')?.touched) {
+        <small class="p-error mt-1">El nombre del usuario es requerido</small>
+        }
+      </div>
+      <!-- Apellidos -->
+      <div class="flex flex-col col-span-2 w-full mx-auto mb-3">
+        <label for="apellidos" class="mb-2" style="width: 300px"
+          >Apellidos</label
+        >
+        <input
+          id="apellidos"
+          type="text"
+          pInputText
+          formControlName="apellidos"
+          placeholder="Ingrese el usuario"
+          class="w-full mx-auto"
+          value="{{ oldEditUsuario?.apellidos }}"
+        />
+        @if (usuarioForm.get('nombre')?.invalid &&
+        usuarioForm.get('nombre')?.touched) {
+        <small class="p-error mt-1"
+          >Los apellidos del usuario son requeridos</small
+        >
+        }
+      </div>
+      <!-- DNI -->
+      <div class="flex flex-col w-full mx-auto mb-3 col-span-2">
+        <label for="dni" class="mb-2" style="width: 300px">DNI</label>
+        <input
+          id="dni"
+          type="text"
+          pInputText
+          formControlName="dni"
+          placeholder="Ingrese el usuario"
+          class="w-full mx-auto"
+          value="{{ oldEditUsuario?.dni }}"
+        />
+        @if (usuarioForm.get('dni')?.invalid && usuarioForm.get('dni')?.touched)
+        {
+        <small class="p-error mt-1">El DNI del usuario es requerido</small>
+        }
+      </div>
+      <!-- Email -->
+      <div class="flex flex-col w-full mx-auto mb-3 col-span-2">
+        <label for="email" class="mb-2" style="width: 300px">Email</label>
+        <input
+          id="email"
+          type="text"
+          pInputText
+          formControlName="email"
+          placeholder="Ingrese el usuario"
+          class="w-full mx-auto"
+          value="{{ oldEditUsuario?.email }}"
+        />
+        @if (usuarioForm.get('email')?.invalid &&
+        usuarioForm.get('email')?.touched) {
+        <small class="p-error mt-1">El email del usuario es requerido</small>
+        }
+      </div>
+      <!-- Grupo -->
+      <div class="flex flex-col justify-center">
+        <label for="grupo" class="block mb-2">Grupo</label>
+        <p-dropdown
+          id="grupo"
+          [options]="gruposList"
+          formControlName="grupo"
+          optionLabel="nombre"
+          placeholder="Seleccione un grupo"
+          (onChange)="onGrupoSelectionChange($event)"
+        ></p-dropdown>
+        @if(usuarioForm.get('grupo')?.invalid &&
+        usuarioForm.get('grupo')?.touched){
+        <small class="p-error"> El grupo es requerido </small>
+        }
+      </div>
+
+      <!-- Servicios -->
+      <div class="flex flex-col justify-center">
+        <label for="servicio" class="block mb-2" style="width: 100px"
+          >Servicios</label
+        >
+        <p-dropdown
+          id="servicio"
+          [options]="serviciosList"
+          formControlName="servicio"
+          optionLabel="nombre"
+          placeholder="Seleccione un servicio"
+        ></p-dropdown>
+      </div>
+
+      <!-- Rol -->
+      <div class="flex flex-col justify-center">
+        <label for="role" class="block mb-2" style="width: 100px">Rol</label>
+        <p-dropdown
+          id="role"
+          [options]="rolesList"
+          formControlName="role"
+          optionLabel="nombre"
+          placeholder="Seleccione un grupo"
+        ></p-dropdown>
+        @if(usuarioForm.get('role')?.invalid &&
+        usuarioForm.get('role')?.touched){
+        <small class="p-error"> El rol es requerido </small>
+        }
+      </div>
+      <!-- Bloqueado -->
+      <div class="flex gap-1 items-end">
+        <p-toggleButton
+          formControlName="bloqueado"
+          onLabel="Bloqueado"
+          offLabel="Desbloqueado"
+        />
+      </div>
+
+      <div class="flex gap-2 col-span-4">
+        <p-button
+          label="Guardar"
+          [outlined]="true"
+          size="small"
+          [icon]="'pi pi-save'"
+          type="submit"
+        />
+        <p-button
+          [disabled]="!isEditingUsuario"
+          label="Cancelar"
+          [outlined]="true"
+          severity="danger"
+          size="small"
+          [icon]="'pi pi-times'"
+          (click)="cancelEditUsuario()"
+        />
+      </div>
+    </form>
+  </p-panel>
+</section>

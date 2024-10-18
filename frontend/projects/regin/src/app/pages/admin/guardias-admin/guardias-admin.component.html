@@ -1,0 +1,135 @@
+<section class="h-full mx-5">
+  <app-breadcrumb />
+
+  <h3 class="font-medium text-center">
+    <i class="pi pi-map-marker text-teal-500 ml-4 px-2"></i> Listado de Guardias
+    Localizadas
+  </h3>
+
+  <div class="card max-w-7xl mx-auto">
+    <p-button
+      label="Generar PDF"
+      (click)="generarPDF()"
+      icon="pi pi-file-pdf"
+      size="small"
+      styleClass="ml-2"
+    />
+
+    <p-table
+      #dt2
+      [value]="guardiasList"
+      [tableStyle]="{ 'min-width': '70rem' }"
+      [styleClass]="size"
+      styleClass="p-datatable-striped"
+      [paginator]="true"
+      [rows]="10"
+      [rowsPerPageOptions]="[5, 10, 20]"
+      [globalFilterFields]="['comentario', 'fecha', 'usuario.nombre']"
+    >
+      <ng-template pTemplate="caption">
+        <div class="flex justify-between">
+          <!-- FIltro Calendario -->
+          <div class="flex flex-col mb-5">
+            <label class="text-sm font-normal my-1 text-[#4a5568] mb-1"
+              >Filtrar por fecha: Inicio - Fin</label
+            >
+            <app-calendar
+              [(rangeDates)]="fecha"
+              (rangeDatesChange)="onDateChanged($event)"
+            />
+            <span
+              class="mt-2 text-teal-500 cursor-pointer text-xs px-2"
+              (click)="clearDate()"
+            >
+              Limpiar filtro de fecha
+            </span>
+          </div>
+
+          <!-- Filtro lo demas -->
+
+          <div class="flex flex-col items-end mb-5">
+            <label class="text-sm font-normal my-1 text-[#4a5568] px-2 mb-1"
+              >Busqueda por comentario
+            </label>
+            <p-iconField iconPosition="right" class="ml-auto">
+              <p-inputIcon>
+                <i class="pi pi-search"></i>
+              </p-inputIcon>
+              <input
+                pInputText
+                type="text"
+                (input)="
+                  dt2.filterGlobal($any($event.target).value, 'contains')
+                "
+                placeholder="Buscar..."
+                class="custom-input"
+              />
+            </p-iconField>
+          </div>
+        </div>
+      </ng-template>
+
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="fecha" style="width: 15%">
+            Fecha <p-sortIcon field="fecha" />
+          </th>
+          <th pSortableColumn="horaInicio" style="width: 15%">
+            Hora Inicio <p-sortIcon field="horaInicio" />
+          </th>
+          <th pSortableColumn="horaFin" style="width: 15%">
+            Hora Fin <p-sortIcon field="horaFin" />
+          </th>
+          <th pSortableColumn="usuario" style="width: 20%">
+            Usuario <p-sortIcon field="usuario" />
+          </th>
+          <th pSortableColumn="comentario" style="width: 35%">
+            Comentario <p-sortIcon field="comentario" />
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-guardiasList>
+        <tr>
+          <td>{{ guardiasList.fecha | date : "dd/MM/yyyy" }}</td>
+          <td>{{ guardiasList.horaInicio }}</td>
+          <td>{{ guardiasList.horaFin }}</td>
+          <td>{{ guardiasList.usuario.nombre }}</td>
+          @if(guardiasList.comentario.length >= 30 ){
+
+          <td>
+            <!-- Mostrar el comentario dependiendo de si está expandido o no -->
+            <ng-container
+              *ngIf="
+                isComentarioExpandido(guardiasList.id);
+                else comentarioCorto
+              "
+            >
+              {{ guardiasList.comentario }}
+              <br />
+              <span
+                class="cursor-pointer text-teal-500 text-sm"
+                (click)="mostrarComentarioCompleto(guardiasList.id)"
+              >
+                Ver menos
+              </span>
+            </ng-container>
+            <!-- Mostrar solo una parte del comentario -->
+            <ng-template #comentarioCorto>
+              {{ guardiasList.comentario.slice(0, 30) }}...
+              <br />
+              <span
+                class="cursor-pointer text-teal-500 text-sm"
+                (click)="mostrarComentarioCompleto(guardiasList.id)"
+              >
+                Ver comentario completo
+              </span>
+            </ng-template>
+          </td>
+          }@else {
+          <td>{{ guardiasList.comentario }}</td>
+          }
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</section>

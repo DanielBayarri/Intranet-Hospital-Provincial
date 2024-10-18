@@ -1,0 +1,13 @@
+<div class="max-w-[85rem] mx-auto px-2 flex justify-between items-center">
+  <img src="/logo.webp" alt="Logo" height="70" />
+
+  <div class="flex items-center gap-4 text-[#2cb7ab] font-bold">
+    <span> {{ user()?.nombre }} {{ user()?.apellidos }} </span>
+    <div>
+      <i
+        class="pi pi-sign-out cursor-pointer font-bold"
+        (click)="onLogout()"
+      ></i>
+    </div>
+  </div>
+</div>

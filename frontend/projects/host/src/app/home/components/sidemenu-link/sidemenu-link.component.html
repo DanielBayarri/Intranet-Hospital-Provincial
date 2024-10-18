@@ -1,0 +1,24 @@
+@if(isLink) {
+<a
+  class="flex w-full rounded-lg justify-between items-center py-4 bg-[#eaeced] no-underline text-textColor hover:bg-gray-200 px-5 cursor-pointer"
+  href="{{ url }}"
+  target="_blank"
+>
+  <div class="flex items-center">
+    <i class="pi pi-{{ icon }} mr-3 text-xl"></i>
+    <span class="text-sm font-bold">{{ name }}</span>
+  </div>
+  <i class="pi pi-link bg-[#ed8b00] rounded-full p-2 text-white"></i>
+</a>
+}@else {
+<a
+  class="flex w-full rounded-lg justify-between items-center py-4 bg-[#eaeced] hover:bg-gray-200 px-5 cursor-pointer"
+>
+  <div class="flex items-center">
+    <i class="pi pi-{{ icon }} mr-3 text-xl"></i>
+    <span class="text-sm font-bold">{{ name }}</span>
+  </div>
+
+  <i class="pi pi-link bg-[#ed8b00] rounded-full p-2 ml-2 text-white"></i>
+</a>
+}

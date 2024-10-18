@@ -1,0 +1,220 @@
+<section class="h-full mx-5">
+  <p-toast />
+  <p-confirmPopup />
+  <app-breadcrumb />
+  <h3 class="font-medium text-center">
+    <i class="pi pi-objects-column text-teal-500 ml-4 px-2"></i> Grupos y
+    Servicios
+  </h3>
+
+  <div class="card flex justify-content-center">
+    <form [formGroup]="grupoForm">
+      <p-dropdown
+        formControlName="grupo"
+        [options]="gruposList"
+        optionLabel="nombre"
+        placeholder="Selecciona un grupo"
+        (onChange)="onGrupoSelectionChange($event)"
+      />
+    </form>
+  </div>
+
+  <div class="flex gap-10 justify-evenly">
+    <!-- Tabla de Tipos -->
+    <p-table
+      [value]="gruposList"
+      styleClass="w-[500px]"
+      [paginator]="true"
+      [rows]="5"
+      [rowsPerPageOptions]="[5, 10, 20]"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Grupo</th>
+          <th>Acciones</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-grupo>
+        <tr>
+          <td>{{ grupo.nombre }}</td>
+          <td>
+            <i
+              pTooltip="Editar"
+              tooltipPosition="top"
+              class="pi pi-pencil text-cyan-600 mx-2 cursor-pointer"
+              (click)="editingGrupo(grupo)"
+            ></i>
+            <i
+              pTooltip="Eliminar"
+              tooltipPosition="top"
+              class="pi pi-trash text-red-600 mx-2 cursor-pointer"
+              (click)="deleteGrupo($event, grupo)"
+            ></i>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+
+    @if (!isLoading) {
+    <p-table
+      [value]="serviciosList"
+      styleClass="w-[500px]"
+      [paginator]="true"
+      [rows]="5"
+      [rowsPerPageOptions]="[5, 10, 20]"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Servicio</th>
+          <th>Grupo al que pertenece</th>
+          <th>Acciones</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-servicio>
+        <tr>
+          <td>{{ servicio.nombre }}</td>
+          <td class="text-sm">{{ servicio.grupo.nombre }}</td>
+          <!-- Mostrar el nombre del tipo al que pertenece -->
+          <td>
+            <i
+              pTooltip="Editar"
+              tooltipPosition="left"
+              class="pi pi-pencil text-cyan-600 mx-2 cursor-pointer"
+              (click)="editingServicio(servicio)"
+            ></i>
+            <i
+              pTooltip="Eliminar"
+              tooltipPosition="left"
+              class="pi pi-trash text-red-600 mx-2 cursor-pointer"
+              (click)="deleteServicio($event, servicio)"
+            ></i>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+    }@else {
+    <div class="w-[500px] h-[332px]"></div>
+    }
+  </div>
+
+  <!-- Formularios -->
+  <h3 class="font-medium text-center">
+    <i class="pi pi-objects-column text-teal-500 ml-4 px-2"></i> Crear y
+    modificar
+  </h3>
+  <div class="flex gap-10 justify-center mt-6">
+    <!-- Grupos -->
+    <p-panel styleClass="w-full min-w-[400px]">
+      <form
+        [formGroup]="grupoForm"
+        (ngSubmit)="!isEditingGrupo ? postGrupo() : patchGrupo(oldEditGrupo)"
+      >
+        <div class="col-span-4 flex flex-col w-full mx-auto mb-3">
+          <label for="grupo" class="mb-2" style="width: 300px">{{
+            isEditingGrupo
+              ? "Editando grupo: " + oldEditGrupo?.nombre
+              : "Crear Grupo"
+          }}</label>
+          <input
+            id="grupo"
+            type="text"
+            pInputText
+            formControlName="grupo"
+            placeholder="Ingrese el grupo"
+            class="w-full mx-auto"
+            value="{{ oldEditGrupo?.nombre }}"
+          />
+        </div>
+        @if (grupoForm.get('grupo')?.invalid && grupoForm.get('grupo')?.touched)
+        {
+        <small class="p-error">El nombre del grupo es requerido</small>
+        }
+        <div class="flex gap-2">
+          <p-button
+            label="Guardar"
+            [outlined]="true"
+            size="small"
+            [icon]="'pi pi-save'"
+            type="submit"
+          />
+          <p-button
+            [disabled]="!isEditingGrupo"
+            label="Cancelar"
+            [outlined]="true"
+            severity="danger"
+            size="small"
+            [icon]="'pi pi-times'"
+            (click)="cancelEditGrupo()"
+          />
+        </div>
+      </form>
+    </p-panel>
+    <!-- Servicios -->
+    <p-panel styleClass="w-full min-w-[400px]">
+      <form
+        [formGroup]="servicioForm"
+        (ngSubmit)="
+          !isEditingServicio ? postServicio() : patchServicio(oldEditServicio)
+        "
+      >
+        <div class="col-span-4 flex flex-col w-full mx-auto mb-3">
+          <label for="servicio" class="flex mb-2" style="width: 300px">{{
+            isEditingServicio
+              ? "Editando servicio: " + oldEditServicio?.nombre
+              : "Crear Servicio"
+          }}</label>
+          <input
+            id="servicio"
+            type="text"
+            pInputText
+            formControlName="servicio"
+            placeholder="Ingrese el servicio"
+            class="w-full mx-auto"
+            value="{{ oldEditServicio?.nombre }}"
+          />
+        </div>
+        @if (servicioForm.get('servicio')?.invalid &&
+        servicioForm.get('servicio')?.touched) {
+        <small class="p-error">El nombre del servicio es requerido</small>
+        }
+
+        <div class="flex flex-col justify-center">
+          <label for="tiposub" class="block mb-2" style="width: 300px">{{
+            isEditingServicio
+              ? "Grupo anterior: " + oldEditServicio?.grupo?.nombre
+              : "Grupo"
+          }}</label>
+          <p-dropdown
+            id="tiposub"
+            [options]="gruposList"
+            formControlName="gruposList"
+            optionLabel="nombre"
+            placeholder="Seleccione un tipo"
+          ></p-dropdown>
+          @if (servicioForm.get('gruposList')?.invalid &&
+          servicioForm.get('gruposList')?.touched) {
+          <small class="p-error">El nombre del grupo es requerido</small>
+          }
+        </div>
+        <div class="flex gap-2 mt-3">
+          <p-button
+            label="Guardar"
+            [outlined]="true"
+            size="small"
+            [icon]="'pi pi-save'"
+            type="submit"
+          />
+          <p-button
+            [disabled]="!isEditingServicio"
+            label="Cancelar"
+            [outlined]="true"
+            severity="danger"
+            size="small"
+            [icon]="'pi pi-times'"
+            (click)="cancelEditServicio()"
+          />
+        </div>
+      </form>
+    </p-panel>
+  </div>
+</section>

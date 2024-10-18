@@ -1,0 +1,260 @@
+{
+	"$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+	"version": 1,
+	"newProjectRoot": "projects",
+	"projects": {
+		"host": {
+			"projectType": "application",
+			"schematics": {},
+			"root": "projects/host",
+			"sourceRoot": "projects/host/src",
+			"prefix": "app",
+			"architect": {
+				"build": {
+					"builder": "@angular-architects/native-federation:build",
+					"options": {},
+					"configurations": {
+						"production": {
+							"target": "host:esbuild:production"
+						},
+						"development": {
+							"target": "host:esbuild:development",
+							"dev": true
+						}
+					},
+					"defaultConfiguration": "production"
+				},
+				"serve": {
+					"builder": "@angular-architects/native-federation:build",
+					"options": {
+						"target": "host:serve-original:development",
+						"rebuildDelay": 0,
+						"dev": true,
+						"port": 0
+					}
+				},
+				"extract-i18n": {
+					"builder": "@angular-devkit/build-angular:extract-i18n"
+				},
+				"test": {
+					"builder": "@angular-devkit/build-angular:karma",
+					"options": {
+						"polyfills": [
+							"zone.js",
+							"zone.js/testing"
+						],
+						"tsConfig": "projects/host/tsconfig.spec.json",
+						"inlineStyleLanguage": "css",
+						"assets": [
+							{
+								"glob": "**/*",
+								"input": "projects/host/public"
+							}
+						],
+						"styles": [
+							"projects/host/src/styles.css",  
+							"primeng/resources/themes/aura-light-teal/theme.css",
+ 							"primeng/resources/primeng.css",
+ 							 "node_modules/primeicons/primeicons.css"
+
+						],
+						"scripts": []
+					}
+				},
+				"esbuild": {
+					"builder": "@angular-devkit/build-angular:application",
+					"options": {
+						"outputPath": "dist/host",
+						"index": "projects/host/src/index.html",
+						"browser": "projects/host/src/main.ts",
+						"polyfills": [
+							"zone.js",
+							"es-module-shims"
+						],
+						"tsConfig": "projects/host/tsconfig.app.json",
+						"inlineStyleLanguage": "css",
+						"assets": [
+							{
+								"glob": "**/*",
+								"input": "projects/host/public"
+							}
+						],
+						"styles": [
+							"projects/host/src/styles.css",
+							"primeng/resources/themes/aura-light-teal/theme.css",
+							"primeng/resources/primeng.css",
+							"node_modules/primeicons/primeicons.css"
+
+						],
+						"scripts": []
+					},
+					"configurations": {
+						"production": {
+							"budgets": [
+								{
+									"type": "initial",
+									"maximumWarning": "500kB",
+									"maximumError": "1MB"
+								},
+								{
+									"type": "anyComponentStyle",
+									"maximumWarning": "2kB",
+									"maximumError": "4kB"
+								}
+							],
+							"outputHashing": "all"
+						},
+						"development": {
+							"optimization": false,
+							"extractLicenses": false,
+							"sourceMap": true
+						}
+					},
+					"defaultConfiguration": "production"
+				},
+				"serve-original": {
+					"builder": "@angular-devkit/build-angular:dev-server",
+					"configurations": {
+						"production": {
+							"buildTarget": "host:esbuild:production"
+						},
+						"development": {
+							"buildTarget": "host:esbuild:development"
+						}
+					},
+					"defaultConfiguration": "development",
+					"options": {
+						"port": 4200
+					}
+				}
+			}
+		},
+		"regin": {
+			"projectType": "application",
+			"schematics": {},
+			"root": "projects/regin",
+			"sourceRoot": "projects/regin/src",
+			"prefix": "app",
+			"architect": {
+				"build": {
+					"builder": "@angular-architects/native-federation:build",
+					"options": {},
+					"configurations": {
+						"production": {
+							"target": "regin:esbuild:production"
+						},
+						"development": {
+							"target": "regin:esbuild:development",
+							"dev": true
+						}
+					},
+					"defaultConfiguration": "production"
+				},
+				"serve": {
+					"builder": "@angular-architects/native-federation:build",
+					"options": {
+						"target": "regin:serve-original:development",
+						"rebuildDelay": 0,
+						"dev": true,
+						"port": 0
+					}
+				},
+				"extract-i18n": {
+					"builder": "@angular-devkit/build-angular:extract-i18n"
+				},
+				"test": {
+					"builder": "@angular-devkit/build-angular:karma",
+					"options": {
+						"polyfills": [
+							"zone.js",
+							"zone.js/testing"
+						],
+						"tsConfig": "projects/regin/tsconfig.spec.json",
+						"assets": [
+							{
+								"glob": "**/*",
+								"input": "projects/regin/public"
+							}
+						],
+						"styles": [
+							"projects/regin/src/styles.css",
+							"primeng/resources/themes/aura-light-teal/theme.css",
+							"primeng/resources/primeng.css",
+							"node_modules/primeicons/primeicons.css"
+
+						],
+						"scripts": []
+					}
+				},
+				"esbuild": {
+					"builder": "@angular-devkit/build-angular:application",
+					"options": {
+						"outputPath": "dist/regin",
+						"index": "projects/regin/src/index.html",
+						"browser": "projects/regin/src/main.ts",
+						"polyfills": [
+							"zone.js",
+							"es-module-shims"
+						],
+						"tsConfig": "projects/regin/tsconfig.app.json",
+						"assets": [
+							{
+								"glob": "**/*",
+								"input": "projects/regin/public"
+							}
+						],
+						"styles": [
+							"projects/regin/src/styles.css",							
+							"primeng/resources/themes/aura-light-teal/theme.css",
+							"primeng/resources/primeng.css",
+							"node_modules/primeicons/primeicons.css"
+
+						],
+						"scripts": []
+					},
+					"configurations": {
+						"production": {
+							"budgets": [
+								{
+									"type": "initial",
+									"maximumWarning": "500kB",
+									"maximumError": "1MB"
+								},
+								{
+									"type": "anyComponentStyle",
+									"maximumWarning": "2kB",
+									"maximumError": "4kB"
+								}
+							],
+							"outputHashing": "all"
+						},
+						"development": {
+							"optimization": false,
+							"extractLicenses": false,
+							"sourceMap": true
+						}
+					},
+					"defaultConfiguration": "production"
+				},
+				"serve-original": {
+					"builder": "@angular-devkit/build-angular:dev-server",
+					"configurations": {
+						"production": {
+							"buildTarget": "regin:esbuild:production"
+						},
+						"development": {
+							"buildTarget": "regin:esbuild:development"
+						}
+					},
+					"defaultConfiguration": "development",
+					"options": {
+						"port": 4201
+					}
+				}
+			}
+		}
+  },
+  "cli": {
+    "analytics": false
+  }
+}

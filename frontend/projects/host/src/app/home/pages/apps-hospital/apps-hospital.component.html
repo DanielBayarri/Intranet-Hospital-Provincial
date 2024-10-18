@@ -1,0 +1,32 @@
+<section class="flex flex-col items-c">
+  <h2 class="text-xl font-bold text-textColor">Aplicaciones Internas</h2>
+  <app-primary-bar />
+
+  <!-- Buscador -->
+  <div class="flex flex-col gap-2 mt-4 mx-auto">
+    <input
+      pInputText
+      type="text "
+      name="searchInputValue"
+      id="search-contact"
+      [(ngModel)]="searchInputValue"
+      placeholder="Buscar..."
+    />
+    <small class="text-textColor"> Escribe el nombre de la aplicación </small>
+  </div>
+
+  <!-- Listado -->
+  <div>
+    <h3 class="text-textColor text-base">Aplicaciones Hospital Provincial</h3>
+    <ul
+      class="list-disc list-outside text-azul mt-6 text-[0.95rem] no-underline font-bold grid grid-cols-4 gap-6"
+    >
+      @for (link of linksApp | searchName: searchInputValue ; track $index){
+      <li class="mx-5">
+        <app-sidemenu-app [name]="link.nombre" [url]="link.url" />
+      </li>
+      }
+    </ul>
+  </div>
+  <div class="mr-16 h-[2px] flex w-full bg-gray-100 my-6"></div>
+</section>
